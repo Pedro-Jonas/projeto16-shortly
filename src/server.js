@@ -2,6 +2,7 @@ import express, { json } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv'
 import connection from './Database/connection.js';
+import authRoutes from './Routes/auth.Routes.js';
 
 dotenv.config();
 const server = express();
@@ -18,6 +19,8 @@ server.get("/users" , async (req, res) => {
         res.sendStatus(422);
     }
 });
+
+server.use(authRoutes);
 
 
 server.listen(process.env.PORT, () => {
