@@ -20,6 +20,15 @@ server.get("/users" , async (req, res) => {
     }
 });
 
+server.get("/sessions" , async (req, res) => {
+    try{
+        const sessions = await connection.query('SELECT * FROM sessions;');
+        res.send(sessions.rows).status(200);
+    } catch {
+        res.sendStatus(422);
+    }
+});
+
 server.use(authRoutes);
 
 

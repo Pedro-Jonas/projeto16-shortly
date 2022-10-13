@@ -10,6 +10,11 @@ const signupSchema = joi.object({
     confirmPassword: joi.any().equal(joi.ref('password'))
 });
 
+const signinSchema = joi.object({
+    email: joi.string().required().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
+    password: joi.string().required().min(1).trim()
+});
+
 async function postSignup (req, res){
     const user = req.body;
     const passwordHash = bcrypt.hashSync(user.password, 10);
@@ -22,7 +27,7 @@ async function postSignup (req, res){
         const emails = await connection.query('SELECT email FROM users;');
         const checkEmail = emails.rows.find(element => 
             element.email === user.email
-        )
+        );
         if (checkEmail){
             res.sendStatus(409);
             return
@@ -31,8 +36,38 @@ async function postSignup (req, res){
         [user.name, user.email, passwordHash]);
         res.sendStatus(201);
     } catch{
-        res.sendStatus(422);
+        res.sendStatus(500);
     };
 };
 
-export { postSignup };
+async function postSignin (req, res) {
+    const user = req.body;
+    try{
+        const validation = signinSchema.validate(user);
+        if (validation.error){
+            res.sendStatus(422);
+            return
+        };
+        const users = await connection.query('SELECT id, email, password FROM users;');
+        const checkuser = users.rows.find(element => 
+            element.email === user.email
+        );
+        if (!checkuser){
+            res.sendStatus(401);
+            return
+        };
+        const validatePassword = bcrypt.compareSync(user.password, checkuser.password);
+        if (!validatePassword){
+            res.sendStatus(401);
+            return
+        };
+        const token = uuid();
+        const insertsession = await connection.query('INSERT INTO sessions ("userId", token) VALUES ($1, $2)',
+        [checkuser.id, token]);
+        res.send({token}).status(200);
+    } catch {
+        res.sendStatus(500);
+    }
+};
+
+export { postSignup, postSignin };
