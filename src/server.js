@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv'
 import connection from './Database/connection.js';
 import authRoutes from './Routes/auth.Routes.js';
+import urlRoutes from './Routes/url.Routes.js';
 
 dotenv.config();
 const server = express();
@@ -20,6 +21,15 @@ server.get("/users" , async (req, res) => {
     }
 });
 
+server.get("/urls" , async (req, res) => {
+    try{
+        const urls = await connection.query('SELECT * FROM urls;');
+        res.send(urls.rows).status(200);
+    } catch {
+        res.sendStatus(422);
+    }
+});
+
 server.get("/sessions" , async (req, res) => {
     try{
         const sessions = await connection.query('SELECT * FROM sessions;');
@@ -30,6 +40,7 @@ server.get("/sessions" , async (req, res) => {
 });
 
 server.use(authRoutes);
+server.use(urlRoutes);
 
 
 server.listen(process.env.PORT, () => {

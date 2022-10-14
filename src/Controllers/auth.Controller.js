@@ -1,7 +1,7 @@
 import joi from "joi";
 import bcrypt from 'bcrypt';
 import {v4 as uuid} from 'uuid';
-import connection from "../Database/connection.js";
+import connection from '../Database/connection.js';
 
 const signupSchema = joi.object({
     name: joi.string().required().min(1).trim(),
@@ -32,7 +32,7 @@ async function postSignup (req, res){
             res.sendStatus(409);
             return
         };
-        const insertUser = await connection.query('INSERT INTO users (name, email, password) VALUES ($1, $2, $3)',
+        const insertUser = await connection.query('INSERT INTO users (name, email, password) VALUES ($1, $2, $3);',
         [user.name, user.email, passwordHash]);
         res.sendStatus(201);
     } catch{
