@@ -37,6 +37,10 @@ async function getUrlsId (req, res){
     try{
         const urls = await connection.query('SELECT id, "shortUrl", url FROM urls WHERE id = $1;',
         [id]);
+        if (urls.rows.length === 0){
+            res.sendStatus(404);
+            return
+        };
         res.send(urls.rows).status(200);
     } catch {
         res.sendStatus(500);
