@@ -12,4 +12,6 @@ router.use(autorizationMiddleware);
 
 router.post('/urls/shorten', urlController.postUrlShoten);
 
+router.delete('/urls/:id', urlController.deleteUrl);
+
 export default router;
