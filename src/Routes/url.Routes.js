@@ -6,6 +6,8 @@ const router = express.Router();
 
 router.get('/urls/:id', urlController.getUrlsId);
 
+router.get('/urls/open/:shortUrl', urlController.getUrlsOpen);
+
 router.use(autorizationMiddleware);
 
 router.post('/urls/shorten', urlController.postUrlShoten);
