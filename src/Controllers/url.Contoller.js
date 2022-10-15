@@ -26,10 +26,21 @@ async function postUrlShoten (req, res){
         const shortUlr = nanoid();
         const insertUser = await connection.query('INSERT INTO urls ("userId", url, "shortUrl") VALUES ($1, $2, $3);',
         [session.rows[0].userId, url.url , shortUlr]);
-        res.send({shortUlr}).status(201)
+        res.send({shortUlr}).status(201);
     } catch {
-        res.sendStatus(500)
+        res.sendStatus(500);
     };
 };
 
-export { postUrlShoten };
+async function getUrlsId (req, res){
+    const id = req.params.id;
+    try{
+        const urls = await connection.query('SELECT id, "shortUrl", url FROM urls WHERE id = $1;',
+        [id]);
+        res.send(urls.rows).status(200);
+    } catch {
+        res.sendStatus(500);
+    }
+};
+
+export { postUrlShoten, getUrlsId };

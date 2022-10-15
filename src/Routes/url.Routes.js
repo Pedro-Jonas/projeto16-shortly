@@ -4,6 +4,7 @@ import autorizationMiddleware from '../Middlewares/authorization.Middleware.js';
 
 const router = express.Router();
 
+router.get('/urls/:id', urlController.getUrlsId);
 
 router.use(autorizationMiddleware);
 
