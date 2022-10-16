@@ -8,6 +8,8 @@ router.get('/urls/:id', urlController.getUrlsId);
 
 router.get('/urls/open/:shortUrl', urlController.getUrlsOpen);
 
+router.get('/ranking', urlController.getRanking);
+
 router.use(autorizationMiddleware);
 
 router.post('/urls/shorten', urlController.postUrlShoten);

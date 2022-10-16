@@ -92,7 +92,14 @@ async function deleteUrl (req, res){
     };
 };
 
+async function getRanking(req, res){
+    try{
+        const ranking = await connection.query('SELECT users.id, users.name, COUNT(urls.*) AS "linksCount", SUM(urls."visitCount") AS "visitCount" FROM urls LEFT JOIN users ON urls."userId" = users.id GROUP BY users.id ORDER BY "visitCount" DESC LIMIT 10;');
+        res.send(ranking.rows).status(200);
+    } catch  {
+        res.sendStatus(500);
+    };
+};
 
 
-
-export { postUrlShoten, getUrlsId, getUrlsOpen, deleteUrl };
+export { postUrlShoten, getUrlsId, getUrlsOpen, deleteUrl, getRanking };

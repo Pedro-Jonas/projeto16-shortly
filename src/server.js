@@ -4,14 +4,13 @@ import dotenv from 'dotenv'
 import connection from './Database/connection.js';
 import authRoutes from './Routes/auth.Routes.js';
 import urlRoutes from './Routes/url.Routes.js';
-import usersRoute from './Routes/users.Rout.js';
+import usersRoutes from './Routes/user.Routes.js';
 
 dotenv.config();
 const server = express();
 
 server.use(json());
 server.use(cors());
-
 
 server.get("/users" , async (req, res) => {
     try{
@@ -42,7 +41,7 @@ server.get("/sessions" , async (req, res) => {
 
 server.use(authRoutes);
 server.use(urlRoutes);
-server.use(usersRoute);
+server.use(usersRoutes);
 
 
 server.listen(process.env.PORT, () => {

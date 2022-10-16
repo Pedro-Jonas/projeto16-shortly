@@ -70,4 +70,14 @@ async function postSignin (req, res) {
     }
 };
 
-export { postSignup, postSignin };
+async function getRanking(req, res){
+    try{
+        const dados = await connection.query('SELECT * FROM users LEFT JOIN urls ON user.id = urls."userId" ;')
+        console.log(dados)
+        res.sendStatus(200);
+    } catch  {
+        res.sendStatus(500);
+    };
+};
+
+export { postSignup, postSignin, getRanking };

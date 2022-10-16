@@ -8,4 +8,5 @@ router.use(autorizationMiddleware);
 
 router.get('/users/me', userController.getUser);
 
+
 export default router;

@@ -31,4 +31,5 @@ async function getUser (req, res){
     };
 };
 
+
 export { getUser };
